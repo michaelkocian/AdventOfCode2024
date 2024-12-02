@@ -1,4 +1,8 @@
-﻿List<int[]> grid = [];
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+List<int[]> grid = [];
 
 //ReadInput
 while (true)
@@ -15,7 +19,7 @@ while (true)
     grid.Add(numbers);
 }
 
-//traverse
+//traverse part1
 int numberOfSafePaths = 0;
 foreach (int[] numbers in grid)
 {
@@ -49,3 +53,55 @@ foreach (int[] numbers in grid)
 }
 
 Console.WriteLine("number of safe paths is: " + numberOfSafePaths);
+
+//traverse part2
+int numberOfSafePathsPart2 = 0;
+foreach (int[] numbers in grid)
+{
+    var dampener = Enumerable.Range(-1, numbers.Length + 1);
+    foreach (int r in dampener)
+    {
+        bool isSafe = true;
+        bool isConsistent = false;
+        List<int> subset = numbers.ToList();
+        if (r >= 0)
+        {
+            subset.RemoveAt(r);
+        }
+        isConsistent = subset.OrderBy(x => x).SequenceEqual(subset)
+            || subset.OrderByDescending(x => x).SequenceEqual(subset);
+
+        if (!isConsistent)
+        {
+            continue;
+        }
+
+        int previous = 0;
+        for (int i = 0; i < subset.Count; i++)
+        {
+            int num = subset[i];
+
+            int diff = Math.Abs(previous - num);
+            if (1 > diff || diff > 3)
+            {
+                if (i == 0)
+                {
+                    previous = num;
+                    continue;
+                }
+
+                isSafe = false;
+                break;
+            }
+            previous = num;
+        }
+
+        if (isSafe && isConsistent)
+        {
+            numberOfSafePathsPart2++;
+            break;
+        }
+    }
+}
+
+Console.WriteLine("number of safe paths with dampener is: " + numberOfSafePathsPart2);
