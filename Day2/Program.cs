@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-List<int[]> grid = [];
+﻿List<int[]> grid = [];
 
 //ReadInput
 while (true)
